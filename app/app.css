@@ -116,6 +116,9 @@ form {
   .uploader-selected-file {
     @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl;
   }
+  .body-content {
+    @apply min-h-screen pt-10;
+  }
 }
 
 @utility bg-gradient {
