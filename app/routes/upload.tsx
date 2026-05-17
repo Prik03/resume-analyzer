@@ -4,6 +4,8 @@ import FileUploader from "~/component/FileUploader";
 import Navbar from "~/component/Navbar";
 import { convertPdfToImage } from "~/lib/pdfToImg";
 import { usePuterStore } from "~/lib/puter";
+import { generateUUID } from "~/lib/utils";
+import { prepareInstructions } from "../../constants";
 
 const upload = () => {
   const { auth, isLoading, ai, kv, fs } = usePuterStore();
@@ -34,6 +36,36 @@ const upload = () => {
 
     setStatusText("Converting to Image...");
     const ImageFile = await convertPdfToImage(file);
+
+    if (!ImageFile.file)
+      return setStatusText("Error: Failed to convert PDF to Image");
+
+    setStatusText("Uploading the Image...");
+    const uploadedImage = await fs.upload([ImageFile.file]);
+    if (!uploadedImage) return setStatusText("Error: Failed to upload Image");
+
+    setStatusText("Preparing Data...");
+
+    const UUID = generateUUID();
+
+    const data = {
+      id: UUID,
+      resumePaht: uploadedFile.path,
+      imagePath: uploadedImage.path,
+      companyName,
+      jobTitle,
+      jobDescription,
+      feedback: "",
+    };
+
+    await kv.set(`resume:${UUID}`, JSON.stringify(data));
+
+    setStatusText("Analyzing...");
+
+    const feedback = await ai.feedback(
+      uploadedFile.path,
+      prepareInstructions({ jobTitle, jobDescription }),
+    );
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
