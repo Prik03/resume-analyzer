@@ -17,3 +17,5 @@ export function formatSize(bytes: number): string {
 
   return `${(bytes / kilobyte).toFixed(2).replace(/\.00$/, "")} KB`;
 }
+
+export const generateUUID = () => crypto.randomUUID();

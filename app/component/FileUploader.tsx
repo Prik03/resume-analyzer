@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { formatSize } from "~/lib/formatSize";
+import { formatSize } from "~/lib/utils";
 
 interface FileUploaderProps {
   onFileSelect?: (file: File | null) => void;
@@ -49,6 +49,18 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
                   <p className="text-sm text-gray">{formatSize(file.size)}</p>
                 </div>
               </div>
+              <button
+                className="p-2 cursor-pointer"
+                onClick={(e) => {
+                  onFileSelect?.(null);
+                }}
+              >
+                <img
+                  src="/icons/cross.svg"
+                  alt={"Remove, " + file.name}
+                  className="w-4 h-4"
+                />
+              </button>
             </div>
           ) : (
             <div>
