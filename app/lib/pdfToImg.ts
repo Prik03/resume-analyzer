@@ -5,20 +5,19 @@ export interface PdfConversionResult {
 }
 
 let pdfjsLib: any = null;
-let isLoading = false;
 let loadPromise: Promise<any> | null = null;
 
 async function loadPdfJs(): Promise<any> {
   if (pdfjsLib) return pdfjsLib;
   if (loadPromise) return loadPromise;
 
-  isLoading = true;
   // @ts-expect-error - pdfjs-dist/build/pdf.mjs is not a module
   loadPromise = import("pdfjs-dist/build/pdf.mjs").then((lib) => {
-    // Set the worker source to use local file
-    lib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    lib.GlobalWorkerOptions.workerSrc = new URL(
+      "pdfjs-dist/build/pdf.worker.min.mjs",
+      import.meta.url
+    ).toString();
     pdfjsLib = lib;
-    isLoading = false;
     return lib;
   });
 
@@ -76,6 +75,8 @@ export async function convertPdfToImage(
       ); // Set quality to maximum (1.0)
     });
   } catch (err) {
+    console.error("PDF conversion failed:", err);
+
     return {
       imageUrl: "",
       file: null,

@@ -21,12 +21,12 @@ const upload = () => {
     companyName,
     jobTitle,
     jobDescription,
-    file,
+    file
   }: {
     companyName: string;
     jobTitle: string;
     jobDescription: string;
-    file: File;
+    file: File
   }) => {
     setIsProcessing(true);
     setStatusText("Uploading the file...");
