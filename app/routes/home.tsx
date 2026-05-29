@@ -41,7 +41,7 @@ export default function Home() {
       <main className="main-section">
         <div className="page-heading py-5">
           <h1>Ai Resume Analyzer Application</h1>
-          {isLoading && resumes?.length === 0 ? (
+          {!isLoading && resumes?.length === 0 ? (
             <h2>No resumes found. Upload your first resume to get feedback.</h2>
           ) : (
             <h2>Review your submission and check AI powered Feedback</h2>
