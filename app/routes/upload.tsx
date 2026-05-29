@@ -21,12 +21,12 @@ const upload = () => {
     companyName,
     jobTitle,
     jobDescription,
-    file,
+    file
   }: {
     companyName: string;
     jobTitle: string;
     jobDescription: string;
-    file: File;
+    file: File
   }) => {
     setIsProcessing(true);
     setStatusText("Uploading the file...");
@@ -50,8 +50,8 @@ const upload = () => {
 
     const data = {
       id: UUID,
-      resumePaht: uploadedFile.path,
-      imagePath: uploadedImage.path,
+      resumePath: uploadedFile.path,
+      imagePath: uploadedImage.path, 
       companyName,
       jobTitle,
       jobDescription,
@@ -76,7 +76,7 @@ const upload = () => {
     data.feedback = JSON.parse(feedbackText);
     await kv.set(`resume:${UUID}`, JSON.stringify(data));
     setStatusText("Analysis Complete, redirecting...");
-    console.log(data);
+    navigate(`/resume/${UUID}`);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
