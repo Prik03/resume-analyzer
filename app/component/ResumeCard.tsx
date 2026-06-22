@@ -9,7 +9,7 @@ const ResumeCard = ({
 }: {
   resumeData: Resume;
 }) => {  const [resumeUrl, setResumeUrl] = useState("");
-    const { fs } = usePuterStore();
+    const { fs, kv } = usePuterStore();
 
   useEffect(() => {
   const  loadResume = async () => {
@@ -22,10 +22,14 @@ const ResumeCard = ({
   loadResume();
   },[imagePath]);
 
+  const handleDelete = async (resumePath: string) => {
+    const deleteData = await fs.read(resumePath);
+    console.log("deleteData", deleteData);
+  }
+
   return (
-    <Link
-      to={`/resume/${id}`}
-      className="resume-card animate-in fade-in duration-1000"
+    <div
+      className="resume-card animate-in fade-in duration-1000 h-fit"
     >
       <div className="resume-card-header">
         <div className="flex flex-col gap-2">
@@ -47,7 +51,19 @@ const ResumeCard = ({
           />
         </div>
       </div>)}
-    </Link>
+      <div className="flex gap-4 mt-2 flex-col sm:flex-row">
+      <Link
+        to={`/resume/${id}`}
+        className="block h-full primary-button w-full p-4 text-center mb-4 sm:w-[50%]"
+        aria-label={`View details for resume ${companyName || jobTitle || 'Resume'}`}
+      >
+        View Details
+      </Link>
+      <button className="block h-full primary-button w-full p-4 text-center mb-4 sm:w-[50%]" aria-label={`Delete resume ${companyName || jobTitle || 'Resume'}`} onClick={() => handleDelete(resumePath)}>
+        Delete
+      </button>
+      </div>
+    </div>
   );
 };
 
